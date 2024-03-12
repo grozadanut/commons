@@ -86,15 +86,20 @@ public class StringUtils
 	 * Truncates the <code>input</code> to at most <code>maxLength</code> chars.
 	 * <br><br>
 	 * Note: if the string is truncated, adds ELLIPSES at the end, 
-	 * so the actual length will be maxLength + ELLIPSES.length
+	 * so the actual string will be truncated to maxLength - ELLIPSES.length<br>
+	 * Special case: if maxLength <= 6 does not add ELLIPSES anymore
 	 */
 	public static String truncate(final String input, final int maxLength)
 	{
 		if (input == null)
 			return EMPTY_STRING;
 		
-	    if(input.length() > maxLength)
-	        return input.substring(0, maxLength)+ELLIPSES;
+		String suffix = ELLIPSES;
+		if (maxLength <= 6)
+			suffix = EMPTY_STRING;
+		
+		if(input.length() > maxLength)
+	        return input.substring(0, Math.max(maxLength-suffix.length(), 0))+suffix;
 	    else
 	        return input;
 	}
