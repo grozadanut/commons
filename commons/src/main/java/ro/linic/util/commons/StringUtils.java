@@ -67,10 +67,28 @@ public class StringUtils
 		return UUID.randomUUID().toString().replaceAll("-", EMPTY_STRING);
 	}
 	
-	public static boolean isEmpty(final String value)
-	{
-		return value == null || value.isEmpty();
-	}
+	/**
+     * <p>Checks if a CharSequence is empty ("") or null.</p>
+     *
+     * <pre>
+     * StringUtils.isEmpty(null)      = true
+     * StringUtils.isEmpty("")        = true
+     * StringUtils.isEmpty(" ")       = false
+     * StringUtils.isEmpty("bob")     = false
+     * StringUtils.isEmpty("  bob  ") = false
+     * </pre>
+     *
+     * <p>NOTE: This method changed in Lang version 2.0.
+     * It no longer trims the CharSequence.
+     * That functionality is available in isBlank().</p>
+     *
+     * @param cs  the CharSequence to check, may be null
+     * @return {@code true} if the CharSequence is empty or null
+     * @since 3.0 Changed signature from isEmpty(String) to isEmpty(CharSequence)
+     */
+    public static boolean isEmpty(final CharSequence cs) {
+        return cs == null || cs.isEmpty();
+    }
 	
 	public static boolean notEmpty(final String value)
 	{
@@ -252,6 +270,75 @@ public class StringUtils
 		return Optional.ofNullable(value).map(String::trim).orElse(null);
 	}
 	
+	/**
+     * <p>Checks if the CharSequence contains only uppercase characters.</p>
+     *
+     * <p>{@code null} will return {@code false}.
+     * An empty String (length()=0) will return {@code false}.</p>
+     *
+     * <pre>
+     * StringUtils.isAllUpperCase(null)   = false
+     * StringUtils.isAllUpperCase("")     = false
+     * StringUtils.isAllUpperCase("  ")   = false
+     * StringUtils.isAllUpperCase("ABC")  = true
+     * StringUtils.isAllUpperCase("aBC")  = false
+     * StringUtils.isAllUpperCase("A C")  = false
+     * StringUtils.isAllUpperCase("A1C")  = false
+     * StringUtils.isAllUpperCase("A/C")  = false
+     * </pre>
+     *
+     * @param cs the CharSequence to check, may be null
+     * @return {@code true} if only contains uppercase characters, and is non-null
+     * @since 2.5
+     * @since 3.0 Changed signature from isAllUpperCase(String) to isAllUpperCase(CharSequence)
+     */
+    public static boolean isAllUpperCase(final CharSequence cs) {
+        if (isEmpty(cs)) {
+            return false;
+        }
+        final int sz = cs.length();
+        for (int i = 0; i < sz; i++) {
+            if (!Character.isUpperCase(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * <p>Checks if the CharSequence contains only lowercase characters.</p>
+     *
+     * <p>{@code null} will return {@code false}.
+     * An empty CharSequence (length()=0) will return {@code false}.</p>
+     *
+     * <pre>
+     * StringUtils.isAllLowerCase(null)   = false
+     * StringUtils.isAllLowerCase("")     = false
+     * StringUtils.isAllLowerCase("  ")   = false
+     * StringUtils.isAllLowerCase("abc")  = true
+     * StringUtils.isAllLowerCase("abC")  = false
+     * StringUtils.isAllLowerCase("ab c") = false
+     * StringUtils.isAllLowerCase("ab1c") = false
+     * StringUtils.isAllLowerCase("ab/c") = false
+     * </pre>
+     *
+     * @param cs  the CharSequence to check, may be null
+     * @return {@code true} if only contains lowercase characters, and is non-null
+     * @since 2.5
+     * @since 3.0 Changed signature from isAllLowerCase(String) to isAllLowerCase(CharSequence)
+     */
+    public static boolean isAllLowerCase(final CharSequence cs) {
+        if (isEmpty(cs)) {
+            return false;
+        }
+        final int sz = cs.length();
+        for (int i = 0; i < sz; i++) {
+            if (!Character.isLowerCase(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 	
 	/**
 	 * This search gives the following functionalities: <br>
