@@ -19,4 +19,10 @@ class Symbol {
 		this.separator = separator;
 		this.close = close;
 	}
+
+	@Override
+	public String toString() {
+		return "Symbol [precedence=" + precedence + ", type=" + type + ", separator=" + separator + ", close=" + close
+				+ "]";
+	}
 }
