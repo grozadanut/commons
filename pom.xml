@@ -5,8 +5,38 @@
 
     <groupId>ro.flexbiz.util</groupId>
     <artifactId>commons</artifactId>
-    <version>0.0.8</version>
+    <version>1.0.0</version>
 
+	<!-- Project Metadata -->
+    <name>Commons Library</name>
+    <description>A collection of common utilities and helpers.</description>
+    <url>https://github.com/grozadanut/commons</url>
+    
+    <!-- License -->
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    
+    <!-- SCM (Source Control Management) -->
+    <scm>
+        <connection>scm:git:git://github.com/grozadanut/commons.git</connection>
+        <developerConnection>scm:git:ssh://github.com/grozadanut/commons.git</developerConnection>
+        <url>https://github.com/grozadanut/commons</url>
+    </scm>
+    
+    <!-- Developers -->
+    <developers>
+        <developer>
+            <name>Groza Danut</name>
+            <email>danut@grozadanut.eu</email>
+            <organization>Flexbiz</organization>
+            <organizationUrl>https://flexbiz.ro</organizationUrl>
+        </developer>
+    </developers>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
@@ -14,6 +44,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
+	<!-- Dependencies -->
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -29,13 +60,72 @@
 		</dependency>
     </dependencies>
 
+    <!-- Build Configuration -->
     <build>
         <plugins>
+            <!-- Source and Javadoc JARs -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M8</version>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.11.2</version>
+                <configuration>
+			        <additionalOptions>-Xdoclint:none</additionalOptions>
+			    </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- GPG Signing -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.7</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <configuration>
+						  <gpgArguments>
+						    <arg>--pinentry-mode</arg>
+						    <arg>loopback</arg>
+						  </gpgArguments>
+						</configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Publish to Central -->
+	        <plugin>
+	          <groupId>org.sonatype.central</groupId>
+	          <artifactId>central-publishing-maven-plugin</artifactId>
+	          <version>0.7.0</version>
+	          <extensions>true</extensions>
+	          <configuration>
+	            <publishingServerId>central</publishingServerId>
+	          </configuration>
+	        </plugin>
         </plugins>
     </build>
 </project>

@@ -19,7 +19,7 @@ public class ParameterStringBuilderTest {
 		
 		assertTrue(List.of("?key1=value1&key2=value2", "?key2=value2&key1=value1")
 				.contains(ParameterStringBuilder.getParamsString(Map.of("key1", "value1", "key2", "value2"))));
-		assertTrue(List.of("?key1=value1&key2=value2&key3=value3", "?key1=value1&key3=value3&key2=value2", "?key3=value3&key2=value2&key1=value1", "?key3=value3&key1=value1&key2=value2")
+		assertTrue(List.of("?key1=value1&key2=value2&key3=value3", "?key1=value1&key3=value3&key2=value2", "?key3=value3&key2=value2&key1=value1", "?key3=value3&key1=value1&key2=value2", "?key2=value2&key1=value1&key3=value3", "?key2=value2&key3=value3&key1=value1")
 				.contains(ParameterStringBuilder.getParamsString(Map.of("key1", "value1", "key2", "value2", "key3", "value3"))));
 		
 		assertEquals(ParameterStringBuilder.getParamsString(Map.of("key&", "value?:&")), "?key%26=value%3F%3A%26");
