@@ -1,6 +1,6 @@
 # Deploy
 
-Library now available at Maven Central: `ro.flexbiz.util:commons:1.0.0`
+Library now available at Maven Central: `ro.flexbiz.util:commons:1.0.1`
 
 To deploy:
 1. Set `MAVEN_GPG_PASSPHRASE` environment variable with the pgp passphrase 
