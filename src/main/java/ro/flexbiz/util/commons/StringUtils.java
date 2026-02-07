@@ -339,6 +339,32 @@ public class StringUtils
         }
         return true;
     }
+    
+    /**
+     * Parses the string argument as a boolean.  The {@code boolean}
+     * returned represents the value {@code true} if the string argument
+     * is not {@code null} and is equal, ignoring case, to the string
+     * {@code "true"} or {@code "Y"}.
+     * Otherwise, a false value is returned, including for a null
+     * argument.<p>
+     * Example: {@code parseBoolean("True")} returns {@code true}.<br>
+     * Example: {@code parseBoolean("yes")} returns {@code false}.<br>
+     * Example: {@code parseBoolean("y")} returns {@code true}.
+     *
+     * @param      s   the {@code String} containing the boolean
+     *                 representation to be parsed
+     * @return     the boolean represented by the string argument
+     */
+	public static boolean parseBoolean(final String s) {
+		if (isEmpty(s))
+			return false;
+
+		try {
+			return "true".equalsIgnoreCase(s.trim()) || "Y".equalsIgnoreCase(s.trim());
+		} catch (final Exception ex) {
+			return false;
+		}
+	}
 	
 	/**
 	 * This search gives the following functionalities: <br>

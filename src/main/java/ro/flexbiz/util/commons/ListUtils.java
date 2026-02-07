@@ -1,6 +1,7 @@
 package ro.flexbiz.util.commons;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -47,6 +48,14 @@ public class ListUtils {
 		else
 			return NONE_ARE_NULL;
 	}
+	
+	public static boolean isEmpty(Collection collection) {
+        return collection == null || collection.isEmpty();
+    }
+	
+	public static boolean notEmpty(Collection collection) {
+        return !isEmpty(collection);
+    }
 
 	/**
 	 * This version:
