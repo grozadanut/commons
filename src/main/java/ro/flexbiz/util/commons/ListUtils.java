@@ -107,4 +107,10 @@ public class ListUtils {
 			return map;
 		});
 	}
+	
+	public static <T> Set<T> intersection(Set<T> a, Set<T> b) {
+		final Set<T> intersectSet = new HashSet<>(a);
+		intersectSet.retainAll(b);
+		return intersectSet;
+	}
 }

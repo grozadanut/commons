@@ -17,7 +17,7 @@ public class ReconciliationEngineTest {
 	public void simpleCases() {
 		// given
 		final List<ReconciliationResult> result = ReconciliationEngine.defaults().reconcile(
-				List.of("Left only", "", "Match", "Start diff", "End diff", "Just a string"),
+				List.of("Left only", "", "Match", "Start diff", "End diff yea", "Just a string"),
 				List.of("", "Right only", "Match", "Small diff", "End difference yea", "Another value"))
 				.stream()
 				.map(Action::result)
@@ -33,8 +33,54 @@ public class ReconciliationEngineTest {
 		assertThatList(result.stream()
 				.map(ReconciliationResult::status)
 				.toList())
-		.containsExactlyInAnyOrder(ReconciliationStatus.LEFT_ONLY, ReconciliationStatus.RIGHT_ONLY,
+		.containsExactlyInAnyOrder(ReconciliationStatus.MISMATCH, ReconciliationStatus.MISMATCH,
 				ReconciliationStatus.RECONCILED, ReconciliationStatus.PARTIALLY_RECONCILED, ReconciliationStatus.PARTIALLY_RECONCILED,
 				ReconciliationStatus.MISMATCH);
+	}
+	
+	@Test
+	public void leftOnlyMatch() {
+		// given
+		final List<ReconciliationResult> result = ReconciliationEngine.defaults().reconcile(
+				List.of("Match", "Left only"),
+				List.of("Match"))
+				.stream()
+				.map(Action::result)
+				.toList();
+		
+		// expect
+		assertThatList(result.stream()
+				.map(ReconciliationResult::match)
+				.map(IdentityMatch::status)
+				.toList())
+		.containsExactlyInAnyOrder(IdentityStatus.CONFIRMED, IdentityStatus.NOT_FOUND);
+		
+		assertThatList(result.stream()
+				.map(ReconciliationResult::status)
+				.toList())
+		.containsExactlyInAnyOrder(ReconciliationStatus.RECONCILED, ReconciliationStatus.LEFT_ONLY);
+	}
+	
+	@Test
+	public void rightOnlyMatch() {
+		// given
+		final List<ReconciliationResult> result = ReconciliationEngine.defaults().reconcile(
+				List.of("Match"),
+				List.of("Match", "Right only"))
+				.stream()
+				.map(Action::result)
+				.toList();
+		
+		// expect
+		assertThatList(result.stream()
+				.map(ReconciliationResult::match)
+				.map(IdentityMatch::status)
+				.toList())
+		.containsExactlyInAnyOrder(IdentityStatus.CONFIRMED, IdentityStatus.NOT_FOUND);
+		
+		assertThatList(result.stream()
+				.map(ReconciliationResult::status)
+				.toList())
+		.containsExactlyInAnyOrder(ReconciliationStatus.RECONCILED, ReconciliationStatus.RIGHT_ONLY);
 	}
 }
