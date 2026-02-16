@@ -1,5 +1,5 @@
 package ro.flexbiz.util.commons.reconciliation.model;
 
-public record BlockKey(String strategy, Object value) {
+public record Index(String strategy, Object value) {
 
 }

@@ -23,7 +23,7 @@ import ro.flexbiz.util.commons.reconciliation.components.RowIndexMatcher;
 import ro.flexbiz.util.commons.reconciliation.components.StringDiffAnalyzer;
 import ro.flexbiz.util.commons.reconciliation.components.StringNormalizer;
 import ro.flexbiz.util.commons.reconciliation.model.Action;
-import ro.flexbiz.util.commons.reconciliation.model.BlockKey;
+import ro.flexbiz.util.commons.reconciliation.model.Index;
 import ro.flexbiz.util.commons.reconciliation.model.IdentityMatch;
 import ro.flexbiz.util.commons.reconciliation.model.IdentityStatus;
 import ro.flexbiz.util.commons.reconciliation.model.NormalizedRecord;
@@ -87,8 +87,8 @@ public class ReconciliationEngineImpl implements ReconciliationEngine {
 	public List<Action> reconcile(List<Object> l, List<Object> r) {
 		final List<NormalizedRecord> left = l.stream().map(leftNormalizer::normalize).toList();
 		final List<NormalizedRecord> right = r.stream().map(rightNormalizer::normalize).toList();
-		final Map<BlockKey, List<NormalizedRecord>> leftIndex = indexAll(left);
-		final Map<BlockKey, List<NormalizedRecord>> rightIndex = indexAll(right);
+		final Map<Index, List<NormalizedRecord>> leftIndex = indexAll(left);
+		final Map<Index, List<NormalizedRecord>> rightIndex = indexAll(right);
 		
 		final List<IdentityMatch> candidates = ListUtils.intersection(leftIndex.keySet(), rightIndex.keySet()).stream()
 				.map(key -> matcher.score(leftIndex.get(key), rightIndex.get(key)))
@@ -129,7 +129,7 @@ public class ReconciliationEngineImpl implements ReconciliationEngine {
 				.toList();
 	}
 
-	private Map<BlockKey, List<NormalizedRecord>> indexAll(List<NormalizedRecord> records) {
+	private Map<Index, List<NormalizedRecord>> indexAll(List<NormalizedRecord> records) {
 		return records.stream()
 				.flatMap(r -> indexer.index(r).stream().map(bk -> Map.entry(bk, r)))
 				.collect(Collectors.groupingBy(Entry::getKey, Collectors.mapping(Entry::getValue, Collectors.toList())));
