@@ -1,7 +1,9 @@
 package ro.flexbiz.util.commons.reconciliation;
 
+import java.util.stream.Stream;
+
 import ro.flexbiz.util.commons.reconciliation.model.NormalizedRecord;
 
 public interface Normalizer {
-	NormalizedRecord normalize(Object original);
+	Stream<NormalizedRecord> normalize(Object original);
 }

@@ -23,9 +23,9 @@ import ro.flexbiz.util.commons.reconciliation.components.RowIndexMatcher;
 import ro.flexbiz.util.commons.reconciliation.components.StringDiffAnalyzer;
 import ro.flexbiz.util.commons.reconciliation.components.StringNormalizer;
 import ro.flexbiz.util.commons.reconciliation.model.Action;
-import ro.flexbiz.util.commons.reconciliation.model.Index;
 import ro.flexbiz.util.commons.reconciliation.model.IdentityMatch;
 import ro.flexbiz.util.commons.reconciliation.model.IdentityStatus;
+import ro.flexbiz.util.commons.reconciliation.model.Index;
 import ro.flexbiz.util.commons.reconciliation.model.NormalizedRecord;
 import ro.flexbiz.util.commons.reconciliation.model.ReconciliationResult;
 import ro.flexbiz.util.commons.reconciliation.model.ReconciliationStatus;
@@ -85,8 +85,8 @@ public class ReconciliationEngineImpl implements ReconciliationEngine {
 
 	@Override
 	public List<Action> reconcile(List<Object> l, List<Object> r) {
-		final List<NormalizedRecord> left = l.stream().map(leftNormalizer::normalize).toList();
-		final List<NormalizedRecord> right = r.stream().map(rightNormalizer::normalize).toList();
+		final List<NormalizedRecord> left = l.stream().flatMap(leftNormalizer::normalize).toList();
+		final List<NormalizedRecord> right = r.stream().flatMap(rightNormalizer::normalize).toList();
 		final Map<Index, List<NormalizedRecord>> leftIndex = indexAll(left);
 		final Map<Index, List<NormalizedRecord>> rightIndex = indexAll(right);
 		
