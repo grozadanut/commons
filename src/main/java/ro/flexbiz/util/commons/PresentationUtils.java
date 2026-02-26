@@ -106,8 +106,10 @@ public interface PresentationUtils
 			return EMPTY_STRING;
 		
 		final DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
+		formatter.setMaximumFractionDigits(2);
 		final DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
 		symbols.setGroupingSeparator(' ');
+		symbols.setDecimalSeparator('.');
 		formatter.setDecimalFormatSymbols(symbols);
 		
 		return formatter.format(decimal);
@@ -127,10 +129,12 @@ public interface PresentationUtils
 			return EMPTY_STRING;
 		
 		final DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
+		formatter.setMinimumFractionDigits(scale);
+		formatter.setMaximumFractionDigits(scale);
 		final DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
 		symbols.setGroupingSeparator(' ');
+		symbols.setDecimalSeparator('.');
 		formatter.setDecimalFormatSymbols(symbols);
-		formatter.setMinimumFractionDigits(scale);
 		
 		return formatter.format(decimal.setScale(scale, roundingMode));
 	}
