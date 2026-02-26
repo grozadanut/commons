@@ -82,6 +82,7 @@ public interface PresentationUtils
 		final DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
 		final DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
 		symbols.setGroupingSeparator(' ');
+		symbols.setDecimalSeparator('.');
 		formatter.setDecimalFormatSymbols(symbols);
 		
 		return formatter.format(percent.multiply(new BigDecimal("100")))+"%";
@@ -95,6 +96,7 @@ public interface PresentationUtils
 		final DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
 		final DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
 		symbols.setGroupingSeparator(' ');
+		symbols.setDecimalSeparator('.');
 		formatter.setDecimalFormatSymbols(symbols);
 		
 		return formatter.format(percent.multiply(new BigDecimal("100")));
