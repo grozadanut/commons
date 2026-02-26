@@ -12,6 +12,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -330,7 +331,7 @@ public class LocalDateUtils
 		return time.format(TIME_FORMATTER);
 	}
 	
-	public static LocalDate fromDate(final Date date)
+	public static LocalDate toLocalDate(final Date date)
 	{
 		return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 	}
@@ -338,6 +339,16 @@ public class LocalDateUtils
 	public static LocalDateTime toLocalDateTime(final Date date)
 	{
 		return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+	}
+	
+	public static LocalDate toLocalDate(final Calendar calendar)
+	{
+		return LocalDate.ofInstant(calendar.toInstant(), calendar.getTimeZone().toZoneId());
+	}
+	
+	public static LocalDateTime toLocalDateTime(final Calendar calendar)
+	{
+		return LocalDateTime.ofInstant(calendar.toInstant(), calendar.getTimeZone().toZoneId());
 	}
 	
 	public static Date asDate(final LocalDateTime localDateTime, final String zoneId)
