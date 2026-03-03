@@ -9,6 +9,6 @@ import ro.flexbiz.util.commons.reconciliation.model.NormalizedRecord;
 public class RowIndexIndexer implements Indexer {
 	@Override
 	public Set<Index> index(NormalizedRecord nr) {
-		return Set.of(new Index("rowIndex", nr.fields().getLong("rowIndex")));
+		return Set.of(new Index("rowIndex", nr.getFields().getLong("rowIndex")));
 	}
 }

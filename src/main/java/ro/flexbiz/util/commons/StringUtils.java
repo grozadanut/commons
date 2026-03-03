@@ -87,7 +87,7 @@ public class StringUtils
      * @since 3.0 Changed signature from isEmpty(String) to isEmpty(CharSequence)
      */
     public static boolean isEmpty(final CharSequence cs) {
-        return cs == null || cs.isEmpty();
+        return cs == null || cs.toString().isEmpty();
     }
 	
 	public static boolean notEmpty(final String value)

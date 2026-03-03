@@ -362,7 +362,22 @@ public class LocalDateUtils
 	    return tz.inDaylightTime(asDate(localDateTime, zoneId));
 	}
 	
-	public static LocalDate parse(final String text)
+	public static LocalDateTime parse(final String text)
+	{
+		if (isEmpty(text))
+			return null;
+		
+		try
+		{
+			return LocalDateTime.parse(text);
+		}
+		catch (final Exception e)
+		{
+			return null;
+		}
+	}
+	
+	public static LocalDate parseDate(final String text)
 	{
 		if (isEmpty(text))
 			return null;

@@ -14,13 +14,13 @@ import ro.flexbiz.util.commons.reconciliation.model.ReconciliationStatus;
 public class StringDiffAnalyzer implements ReconciliationAnalyzer {
 	@Override
 	public ReconciliationResult analyze(IdentityMatch match) {
-		switch (match.status()) {
+		switch (match.getStatus()) {
 		case CONFIRMED:
-			final String ls = match.left().stream()
-					.map(nr -> nr.fields().getString("row"))
+			final String ls = match.getLeft().stream()
+					.map(nr -> nr.getFields().getString("row"))
 					.collect(Collectors.joining(PresentationUtils.NEWLINE));
-			final String rs = match.right().stream()
-					.map(nr -> nr.fields().getString("row"))
+			final String rs = match.getRight().stream()
+					.map(nr -> nr.getFields().getString("row"))
 					.collect(Collectors.joining(PresentationUtils.NEWLINE));
 			if (ls.equalsIgnoreCase(rs))
 				return new ReconciliationResult(match, ReconciliationStatus.RECONCILED, List.of());
@@ -28,9 +28,9 @@ public class StringDiffAnalyzer implements ReconciliationAnalyzer {
 				return new ReconciliationResult(match, ReconciliationStatus.PARTIALLY_RECONCILED, List.of());
 			return new ReconciliationResult(match, ReconciliationStatus.MISMATCH, List.of());
 		default:
-			if (ListUtils.isEmpty(match.left()) && ListUtils.notEmpty(match.right()))
+			if (ListUtils.isEmpty(match.getLeft()) && ListUtils.notEmpty(match.getRight()))
 				return new ReconciliationResult(match, ReconciliationStatus.RIGHT_ONLY, List.of());
-			else if (ListUtils.notEmpty(match.left()) && ListUtils.isEmpty(match.right()))
+			else if (ListUtils.notEmpty(match.getLeft()) && ListUtils.isEmpty(match.getRight()))
 				return new ReconciliationResult(match, ReconciliationStatus.LEFT_ONLY, List.of());
 			return new ReconciliationResult(match, ReconciliationStatus.MISMATCH, List.of());
 		}

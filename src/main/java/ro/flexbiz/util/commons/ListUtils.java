@@ -113,4 +113,10 @@ public class ListUtils {
 		intersectSet.retainAll(b);
 		return intersectSet;
 	}
+	
+	public static <T> Set<T> union(Set<T> a, Set<T> b) {
+		final Set<T> joinSet = new HashSet<>(a);
+		joinSet.addAll(b);
+		return joinSet;
+	}
 }

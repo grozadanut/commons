@@ -103,6 +103,28 @@ public class NumberUtils
 		return a == b || (a != null && b != null && a.compareTo(b) == 0);
 	}
 	
+	public static int compare(final BigDecimal a, final BigDecimal b)
+	{
+		if (a == null)
+			return b == null ? 0 : 1;
+		
+		if (b == null)
+			return -1;
+		
+		return a.compareTo(b);
+	}
+	
+	public static int compareNullsFirst(final BigDecimal a, final BigDecimal b)
+	{
+		if (a == null)
+			return b == null ? 0 : -1;
+		
+		if (b == null)
+			return 1;
+		
+		return a.compareTo(b);
+	}
+	
 	public static boolean nullOrZero(final BigDecimal num)
 	{
 		return num == null || num.compareTo(BigDecimal.ZERO) == 0;

@@ -2,6 +2,7 @@ package ro.flexbiz.util.commons.reconciliation.internal;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -84,15 +85,15 @@ public class ReconciliationEngineImpl implements ReconciliationEngine {
 	}
 
 	@Override
-	public List<Action> reconcile(List<Object> l, List<Object> r) {
-		final List<NormalizedRecord> left = l.stream().flatMap(leftNormalizer::normalize).toList();
-		final List<NormalizedRecord> right = r.stream().flatMap(rightNormalizer::normalize).toList();
+	public <L, R> List<Action> reconcile(Collection<L> l, Collection<R> r) {
+		final List<NormalizedRecord> left = l.stream().flatMap(leftNormalizer::normalize).collect(Collectors.toList());
+		final List<NormalizedRecord> right = r.stream().flatMap(rightNormalizer::normalize).collect(Collectors.toList());
 		final Map<Index, List<NormalizedRecord>> leftIndex = indexAll(left);
 		final Map<Index, List<NormalizedRecord>> rightIndex = indexAll(right);
 		
-		final List<IdentityMatch> candidates = ListUtils.intersection(leftIndex.keySet(), rightIndex.keySet()).stream()
-				.map(key -> matcher.score(leftIndex.get(key), rightIndex.get(key)))
-				.sorted(Comparator.comparing(IdentityMatch::confidence).reversed())
+		final List<IdentityMatch> candidates = ListUtils.union(leftIndex.keySet(), rightIndex.keySet()).stream()
+				.flatMap(key -> matcher.score(key, leftIndex.getOrDefault(key, List.of()), rightIndex.getOrDefault(key, List.of())))
+				.sorted(Comparator.comparing(IdentityMatch::getConfidence).reversed())
 				.collect(Collectors.toList());
 
 		final List<NormalizedRecord> leftMatched = new ArrayList<>();
@@ -100,33 +101,33 @@ public class ReconciliationEngineImpl implements ReconciliationEngine {
 		final List<IdentityMatch> matches = new ArrayList<>();
 		
 		candidates.stream()
-		.filter(im -> Collections.disjoint(im.left(), leftMatched) && Collections.disjoint(im.right(), rightMatched))
-		.peek(im -> leftMatched.addAll(im.left()))
-		.peek(im -> rightMatched.addAll(im.right()))
+		.filter(im -> Collections.disjoint(im.getLeft(), leftMatched) && Collections.disjoint(im.getRight(), rightMatched))
+		.peek(im -> leftMatched.addAll(im.getLeft()))
+		.peek(im -> rightMatched.addAll(im.getRight()))
 		.forEach(matches::add);
 		
 		// add unmatched left&right to matches
 		final List<NormalizedRecord> unmatchedLeft = left.stream()
-				.filter(lnr -> !leftMatched.contains(lnr)).toList();
+				.filter(lnr -> !leftMatched.contains(lnr)).collect(Collectors.toList());
 		if (!unmatchedLeft.isEmpty())
 			matches.add(new IdentityMatch(unmatchedLeft, List.of(), BigDecimal.ZERO, IdentityStatus.NOT_FOUND, List.of()));
 		
 		final List<NormalizedRecord> unmatchedRight = right.stream()
-				.filter(rnr -> !rightMatched.contains(rnr)).toList();
+				.filter(rnr -> !rightMatched.contains(rnr)).collect(Collectors.toList());
 		if (!unmatchedRight.isEmpty())
 			matches.add(new IdentityMatch(List.of(), unmatchedRight, BigDecimal.ZERO, IdentityStatus.NOT_FOUND, List.of()));
 
 		return matches.stream().map(im -> {
-			if (im.status().equals(IdentityStatus.NOT_FOUND)) {
-				if (ListUtils.notEmpty(im.left()) && ListUtils.isEmpty(im.right()))
+			if (im.getStatus().equals(IdentityStatus.NOT_FOUND)) {
+				if (ListUtils.notEmpty(im.getLeft()) && ListUtils.isEmpty(im.getRight()))
 					return new ReconciliationResult(im, ReconciliationStatus.LEFT_ONLY, List.of());
-				else if (ListUtils.isEmpty(im.left()) && ListUtils.notEmpty(im.right()))
+				else if (ListUtils.isEmpty(im.getLeft()) && ListUtils.notEmpty(im.getRight()))
 					return new ReconciliationResult(im, ReconciliationStatus.RIGHT_ONLY, List.of());
 			}
 			return analyzer.analyze(im);
 		})
 				.map(policy::resolve)
-				.toList();
+				.collect(Collectors.toList());
 	}
 
 	private Map<Index, List<NormalizedRecord>> indexAll(List<NormalizedRecord> records) {
