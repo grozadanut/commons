@@ -5,7 +5,7 @@
 
     <groupId>ro.flexbiz.util</groupId>
     <artifactId>commons</artifactId>
-    <version>1.0.1</version>
+    <version>1.j11.0</version>
 
 	<!-- Project Metadata -->
     <name>Commons Library</name>
@@ -39,7 +39,7 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>17</java.version>
+        <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
