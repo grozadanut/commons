@@ -8,15 +8,37 @@ import org.junit.jupiter.api.Test;
 public class StringUtilsTest {
 	@Test
 	public void sanitizePhoneNumber_Test() {
+		// Normal cases
 		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("0755555555"));
 		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("+40755555555"));
-		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("0755 555 555"));
 		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("0040755555555"));
+
+		// Formatting and special characters
+		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("0755 555 555"));
 		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("(0755) 555-555"));
+		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("0755.555.555"));
+		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("  0755555555  "));
+		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("+40 (755) 555-555"));
+		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("-(0040) 755 555 555"));
+
+		// Missing prefix - defaults to +40
+		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("755555555"));
+		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("755 555 555"));
+
+		// Other country prefixes
 		assertEquals("+340752150485", StringUtils.sanitizePhoneNumber("+34 0752 150 485"));
+		assertEquals("+340752150485", StringUtils.sanitizePhoneNumber("0034 0752 150 485"));
+
+		// Edge cases and empty strings
 		assertEquals("", StringUtils.sanitizePhoneNumber(null));
 		assertEquals("", StringUtils.sanitizePhoneNumber(""));
+		assertEquals("   ", StringUtils.sanitizePhoneNumber("   "));
+
+		// Values without digits (returns original input)
 		assertEquals("abc", StringUtils.sanitizePhoneNumber("abc"));
+		assertEquals("+", StringUtils.sanitizePhoneNumber("+"));
+		assertEquals(" + ", StringUtils.sanitizePhoneNumber(" + "));
+		assertEquals("no-digits here", StringUtils.sanitizePhoneNumber("no-digits here"));
 	}
 
 	@Test
