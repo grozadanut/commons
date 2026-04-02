@@ -20,6 +20,7 @@ public class StringUtilsTest {
 		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("  0755555555  "));
 		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("+40 (755) 555-555"));
 		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("-(0040) 755 555 555"));
+		assertEquals("+17022345678", StringUtils.sanitizePhoneNumber("+1 702 234-5678"));
 
 		// Missing prefix - defaults to +40
 		assertEquals("+40755555555", StringUtils.sanitizePhoneNumber("755555555"));
