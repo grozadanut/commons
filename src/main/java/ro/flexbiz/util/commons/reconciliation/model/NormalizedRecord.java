@@ -38,6 +38,9 @@ public class NormalizedRecord {
 	public void setFields(GenericValue fields) {
 		this.fields = fields;
 	}
+	public GenericValue f() {
+		return fields;
+	}
 	@Override
 	public String toString() {
 		return "NormalizedRecord [original=" + original + ", fields=" + fields + "]";
