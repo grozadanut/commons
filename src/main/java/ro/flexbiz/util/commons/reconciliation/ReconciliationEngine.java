@@ -15,6 +15,16 @@ public interface ReconciliationEngine {
 	ReconciliationEngine actionPolicy(ActionPolicy policy);
 	<L, R> List<Action> reconcile(Collection<L> left, Collection<R> right);
 	
+	default <L, R> List<Action> reconcile(L left, R right) {
+		return reconcile(List.of(left), List.of(right));
+	}
+	default <L, R> List<Action> reconcile(Collection<L> left, R right) {
+		return reconcile(left, List.of(right));
+	}
+	default <L, R> List<Action> reconcile(L left, Collection<R> right) {
+		return reconcile(List.of(left), right);
+	}
+	
 	public static ReconciliationEngine defaults() {
         return new ReconciliationEngineImpl();
     }
